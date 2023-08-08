@@ -26,3 +26,22 @@ jobs:
 
       - name: Push backend Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
+
+      # CD steps start here
+      - name: Deploy to EC2
+        # if: github.ref == 'refs/heads/main' # Only run on main branch push, not on pull requests
+        env:
+          PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
+          HOST: ${{ secrets.EC2_HOST }}
+          USER: ${{ secrets.EC2_USER }}
+        run: |
+          # Save private key to a file
+          echo "$PRIVATE_KEY" > private_key.pem
+          chmod 600 private_key.pem
+
+          # SSH into the EC2 instance and pull the latest Docker image, then restart the container
+          ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
+            docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
+            docker stop hotels-hippo-guest-backend || true
+            docker run -d --name hotels-hippo-guest-backend -p 80:80 ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
+          "
