@@ -1,0 +1,34 @@
+# Logs
+*.log
+
+# Node.js Dependency directories
+node_modules/
+npm-debug.log
+
+# Build artifacts
+dist/
+
+# Environment configurations
+.env
+
+# IDEs and editors
+.idea/
+.vscode/
+*.code-workspace
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Temporary files
+*.tmp
+*.swp
+*.swo
+
+# Next.js build output
+.next
+
+
+# next.js
+/.next/
+/out/
