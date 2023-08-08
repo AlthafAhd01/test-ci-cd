@@ -43,5 +43,6 @@ jobs:
           ssh -o StrictHostKeyChecking=no -i private_key.pem $USER@$HOST "
             docker pull ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
             docker stop hotels-hippo-guest-backend || true
+            docker rm hotels-hippo-guest-backend || true
             docker run -d --name hotels-hippo-guest-backend -p 7000:7000 ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
           "
