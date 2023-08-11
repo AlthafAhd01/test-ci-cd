@@ -27,9 +27,7 @@ jobs:
       - name: Push backend Docker image to Docker Hub
         run: docker push ${{ secrets.DOCKER_HUB_USERNAME }}/hotels-hippo-guest-backend:latest
 
-      # CD steps start here
-      - name: Deploy to EC2
-        # if: github.ref == 'refs/heads/main' # Only run on main branch push, not on pull requests
+      - name: Connect to EC2 instance and deploy backend Docker image
         env:
           PRIVATE_KEY: ${{ secrets.EC2_SSH_PRIVATE_KEY }}
           HOST: ${{ secrets.EC2_HOST }}
